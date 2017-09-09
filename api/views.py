@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-
 from rest_framework import viewsets
 from rest_framework import views
 from rest_framework import mixins
@@ -13,10 +11,6 @@ from .authentication import MasterTokenAuth, BasicTokenAuth
 from .permissions import ReadUpdateDeletePerm
 
 
-def test(request):
-    return HttpResponse('Hello world')
-
-
 class TaskViewSet(mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   mixins.DestroyModelMixin,
@@ -27,7 +21,7 @@ class TaskViewSet(mixins.RetrieveModelMixin,
     authentication_classes = (BasicTokenAuth,)
 
 
-class GetAuthToken(views.APIView):
+class AuthTokenView(views.APIView):
     authentication_classes = (MasterTokenAuth,)
 
     def post(self, request, *args, **kwargs):
