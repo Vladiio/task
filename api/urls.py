@@ -6,13 +6,12 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import test, TaskViewSet, GetAuthToken
 
-
 router = DefaultRouter()
-router.register(r'tasks', TaskViewSet, base_name='task')
-
+router.register(r'tasks', TaskViewSet, base_name='tasks')
 
 urlpatterns = [
     url(r'^$', test),
+    # url(r'^tasks/$', TaskViewSet.as_view()),
     url(r'^master-token/$', obtain_auth_token),
     url(r'^token/$', GetAuthToken.as_view()),
 ]

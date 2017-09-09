@@ -3,18 +3,18 @@ from rest_framework.authtoken.models import Token
 from rest_framework import exceptions
 
 
+from .models import CustomToken
+from .utils import fetch_token
+
+
 class MasterTokenAuth(authentication.BaseAuthentication):
 
     def authenticate(self, request):
-        token_header = request.META.get('HTTP_AUTHORIZATION')
+        fetch_token(request, Token)
 
-        if not token_header:
-            raise exceptions.AuthenticationFailed('Token was not provided')
 
-        try:
-            key = token_header.split(' ')[1]
-            token = Token.objects.get(key=key)
-        except IndexError:
-            raise exceptions.AuthenticationFailed('Invalid token header')
-        except Token.DoesNotExist:
-            raise exceptions.AuthenticationFailed('Invalid token')
+class BasicTokenAuth(authentication.BaseAuthentication):
+
+    def authenticate(self, request):
+        fetch_token(request, CustomToken)
+
