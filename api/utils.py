@@ -1,16 +1,11 @@
-from rest_framework import exceptions
+import random
+import string
 
 
-def fetch_token(request, model):
-    token_header = request.META.get('HTTP_AUTHORIZATION')
+def gen_random_string(max_length=20,
+                      chars=string.ascii_letters + string.digits):
+    return ''.join(random.choice(chars) for _ in range(max_length))
 
-    if not token_header:
-        raise exceptions.AuthenticationFailed('Token was not provided')
 
-    try:
-        key = token_header.split(' ')[1]
-        token = model.objects.get(key=key)
-    except IndexError:
-        raise exceptions.AuthenticationFailed('Invalid token header')
-    except model.DoesNotExist:
-        raise exceptions.AuthenticationFailed('Invalid token')
+def get_token(response):
+    return 'Token ' + response.data.get('token')

@@ -1,14 +1,14 @@
 from rest_framework import viewsets
-from rest_framework import views
 from rest_framework import mixins
 from rest_framework import authentication
-from rest_framework.response import  Response
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 from .models import Task, CustomToken
-from .serializers import  TaskSerializer
-from .authentication import MasterTokenAuth, BasicTokenAuth
-from .permissions import ReadUpdateDeletePerm
+from .serializers import TaskSerializer
+from .authentication import CustomTokenAuth
 
 
 class TaskViewSet(mixins.RetrieveModelMixin,
@@ -18,11 +18,13 @@ class TaskViewSet(mixins.RetrieveModelMixin,
                   viewsets.GenericViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    authentication_classes = (BasicTokenAuth,)
+    authentication_classes = (CustomTokenAuth,)
+    permission_classes = ()
 
 
-class AuthTokenView(views.APIView):
-    authentication_classes = (MasterTokenAuth,)
+class AuthTokenView(ObtainAuthToken):
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         token = CustomToken.objects.create()

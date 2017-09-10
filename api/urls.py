@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from rest_framework.routers import  DefaultRouter
+from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import TaskViewSet, AuthTokenView
